@@ -6,8 +6,9 @@ Spam Filter is a Python project that uses a Support Vector Machine (SVM) model t
 
 If you'd like to view and run this project in Google Colab, simply click the button below:
 
-[![View on Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1yGL34XXl7gt0DvVp5cwiIwprnfy7lZpz?usp=sharing)
-
+<a href="https://colab.research.google.com/drive/1yGL34XXl7gt0DvVp5cwiIwprnfy7lZpz?usp=sharing" target="_blank">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="View on Google Colab" style="height: 30px;"/>
+</a>
 
 ## Table of Contents
 
