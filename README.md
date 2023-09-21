@@ -1,4 +1,4 @@
-# Spam Filter
+# Online Spam Filter System
 
 Spam Filter is a Python project that uses a Support Vector Machine (SVM) model to classify emails as spam or non-spam (ham). This README provides an overview of the project, its functionality, and details about the Online SVM model used.
 
