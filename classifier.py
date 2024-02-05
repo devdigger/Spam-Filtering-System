@@ -1,5 +1,6 @@
 import joblib
 import pandas as pd
+import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import SGDClassifier
 from sklearn.model_selection import train_test_split
@@ -150,7 +151,8 @@ class EmailClassifier:
     def update_model(self,label,single_message):
         single_message_lower = single_message.lower()
         single_message_tfidf = self.tfidf_vectorizer.transform([single_message_lower])
-        self.svm_classifier.partial_fit(single_message_tfidf, label, classes=[0, 1])
+        label_flattened = np.array(label).ravel()
+        self.svm_classifier.partial_fit(single_message_tfidf, label_flattened, classes=[0, 1])
         self.save_model()
 
     def save_model(self, model_filename="svm_model.pkl"):
