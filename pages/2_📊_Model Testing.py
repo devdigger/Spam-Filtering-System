@@ -17,12 +17,11 @@ else:
     st.header("Enter email text below : ")
 
     msg = st.text_area('Type or paste email...',height=200)
-    import streamlit as st
+    
 
     # Create a button to clear the page
     sub_button = st.button("Submit")
-    if sub_button not in st.session_state:
-        st.session_state['sub_button'] = True
+    
     # Check if the button is clicked
 
     if sub_button or msg:
