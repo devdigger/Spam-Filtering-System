@@ -3,7 +3,7 @@ from classifier import EmailClassifier
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import seaborn as sns
-import time
+import time,logging
 
 email_classifier = EmailClassifier()
 email_classifier.load_model()
