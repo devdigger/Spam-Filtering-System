@@ -11,6 +11,7 @@ email_classifier.load_model()
 if 'df' not in st.session_state:
 
     df = email_classifier.load_dataset()
+    print(df)
     st.session_state['df'] = df
 else:
     df = st.session_state['df']
