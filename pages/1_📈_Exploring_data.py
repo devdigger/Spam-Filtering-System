@@ -12,12 +12,13 @@ if 'df' not in st.session_state:
 
     df = email_classifier.load_dataset()
     print(df)
+    logging.info(df)
     st.session_state['df'] = df
 else:
     df = st.session_state['df']
 
 
-
+logging.info("DF is",df)
 
 if df is not None:
     st.title("WordCloud Plot")
