@@ -3,22 +3,43 @@ from classifier import EmailClassifier
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import seaborn as sns
-import time,logging
+import time
+
+css='''
+[data-testid="stSidebarNav"] {
+  min-height: 50vh
+}
+'''
+st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
 email_classifier = EmailClassifier()
 email_classifier.load_model()
 
+
+batch_size = 0
+
+with st.sidebar:
+    b_train = st.toggle('Batch Training')
+    if b_train :
+        batch_size = st.slider('Select Batch Size', 1, 4128, 32)
+        st.write("Batch size : ",batch_size)
+        
+    
+
+
+
+
+
+
 if 'df' not in st.session_state:
 
     df = email_classifier.load_dataset()
-    print(df)
-    logging.info(df)
     st.session_state['df'] = df
 else:
     df = st.session_state['df']
 
 
-logging.info("DF is",df)
+
 
 if df is not None:
     st.title("WordCloud Plot")
@@ -52,23 +73,43 @@ if df is not None:
 
 
     st.title("Model Evaluation")
+    
 
+    X, y = email_classifier.prepare_features_labels(df)
     if 'test_accuracy' not in st.session_state or 'cm' not in st.session_state or 'report_df' not in st.session_state:
 
-        X, y = email_classifier.prepare_features_labels(df)
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        email_classifier.train_model(X_train, y_train,st)
+        
+        if b_train:
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+            email_classifier.train_model_batch(X_train, y_train,st,batch_size)
+        if not b_train:
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+            email_classifier.train_model(X_train, y_train,st)
+            
+
         test_accuracy, cm, report_df = email_classifier.evaluate_model(X_test, y_test)
         st.session_state['test_accuracy'],st.session_state['cm'],st.session_state['report_df'] = test_accuracy, cm, report_df
         st.session_state['model'] = email_classifier
     else:
         print("Loaded test_accuracy,cm,report_df from cache")
-
         test_accuracy, cm, report_df = st.session_state['test_accuracy'],st.session_state['cm'],st.session_state['report_df']
         email_classifier = st.session_state['model']
+        
+        if b_train :
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+            email_classifier.train_model_batch(X_train, y_train,st,batch_size)
+            test_accuracy, cm, report_df = email_classifier.evaluate_model(X_test, y_test)
+        
+        if not b_train:
+            
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+            email_classifier.train_model(X_train, y_train,st)
+            test_accuracy, cm, report_df = email_classifier.evaluate_model(X_test, y_test)
+
+        
 
 
-    
+
     cm_fig, cm_ax = plt.subplots(figsize=(8, 6))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', annot_kws={"size": 16}, ax=cm_ax)
     cm_ax.set_xlabel('Predicted Labels')
